@@ -20,6 +20,26 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     sendResponse({ success: true });
   }
   
+  if (message.action === 'openVercelTab') {
+    console.log('Opening Vercel tab with URL:', message.url);
+    
+    // Store product info in chrome storage for Vercel page access
+    if (message.productInfo) {
+      chrome.storage.local.set({ 
+        amazon_product_price: message.productInfo.price,
+        amazon_product_title: message.productInfo.title,
+        amazon_product_info: message.productInfo
+      }, () => {
+        console.log('Product info stored for Vercel page');
+      });
+    }
+    
+    // Open the Vercel tab
+    chrome.tabs.create({ url: message.url });
+    
+    sendResponse({ success: true });
+  }
+  
   return true; // Keep message channel open for async response
 });
 

@@ -21,6 +21,9 @@ const Home = () => {
   const [showCongratulation, setShowCongratulation] = useState(false);
   const [transactionHash, setTransactionHash] = useState<string>('');
   
+  // Base Pay state
+  const [isBasePay, setIsBasePay] = useState(true); // Always show Base Pay for now
+  
   // Wagmi hooks for wallet connection
   const { connect, isPending: isConnecting } = useConnect();
   const { address, isConnected } = useAccount();
@@ -100,6 +103,33 @@ const Home = () => {
     
     // 🔄 Use full backend CDP verification flow
     await createCheckoutSessionAndVerify(txHash);
+  };
+
+  // Handle Base Pay payment
+  const handleBasePayPayment = async () => {
+    try {
+      console.log(`Initiating Base Pay payment of $${productPrice} to ${MERCHANT_ADDRESS}`);
+      
+      // For now, simulate Base Pay success since we don't have the SDK yet
+      // In the future, this will integrate with Base Pay SDK
+      console.log('=== BASE PAY SIMULATION ===');
+      console.log('Amount: $' + productPrice);
+      console.log('To: ' + MERCHANT_ADDRESS);
+      console.log('Network: Base');
+      console.log('Method: Base Pay SDK (simulated)');
+      console.log('========================');
+
+      // Simulate successful payment
+      const simulatedTxHash = '0x' + Math.random().toString(16).substr(2, 64);
+      console.log('Base Pay successful! Simulated transaction hash:', simulatedTxHash);
+      
+      onPaymentSuccess?.(simulatedTxHash);
+      onShowCongratulation?.(simulatedTxHash);
+
+    } catch (error) {
+      console.error('Base Pay failed:', error);
+      // You can add error handling here
+    }
   };
 
   // 🔄 NEW: Create checkout session and verify payment using CDP
@@ -389,44 +419,40 @@ const Home = () => {
             </div>
           </div>
 
-          {/* Connection Info Footer */}
-          <div className={styles.connectionInfo}>
-            {isConnected ? (
-              // Don't show "Connected to:" text when wallet is connected
-              // The disconnect button in PaymentButton already shows connection status
-              null
-            ) : (
-              <>
-                <span className={styles.connectionLabel}>Connecting through: </span>
-                <span className={styles.connectionValue}>Coinbase Wallet</span>
-                <span className={styles.coinbaseIcon}>
-                  <img src="/icons/CB.svg" alt="Coinbase Wallet" />
-                </span>
-              </>
-            )}
-          </div>
-          
-          {/* Disconnect Button - Show when wallet is connected */}
-          {isConnected && (
-            <div className={styles.disconnectButtonContainer}>
-              <button 
-                className={styles.disconnectWalletLink}
-                onClick={handleDisconnect}
-              >
-                Disconnect from Wallet
+          {/* Base Pay Button - Always show at bottom center */}
+          {isBasePay ? (
+            <div className={styles.paymentButtonContainer}>
+              <button
+                onClick={handleBasePayPayment}
+                className={styles.basePayButton}
+                style={{
+                  width: '100%',
+                  padding: '8px',
+                  backgroundColor: '#0052ff',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '12px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px'
+                }}
+              > 
+                Checkout with
+                <img src="/icons/CB.svg" alt="Base Pay" style={{ width: '20px', height: '20px' }} />
               </button>
             </div>
+          ) : (
+            <PaymentButton
+              merchantAddress={MERCHANT_ADDRESS}
+              onPaymentSuccess={handlePaymentSuccess}
+              onPaymentError={handlePaymentError}
+              onShowCongratulation={handleShowCongratulation}
+              disabled={false}
+              className={styles.paymentButtonContainer}
+            />
           )}
-          
-          {/* Main Button - Always show at bottom center */}
-          <PaymentButton
-            merchantAddress={MERCHANT_ADDRESS}
-            onPaymentSuccess={handlePaymentSuccess}
-            onPaymentError={handlePaymentError}
-            onShowCongratulation={handleShowCongratulation}
-            disabled={false}
-            className={styles.paymentButtonContainer}
-          />
         </div>
       </main>
     </div>

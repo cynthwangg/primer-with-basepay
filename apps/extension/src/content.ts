@@ -914,13 +914,28 @@ import { onrampIntegration } from './onramp-integration';
         // Set loading state for Base Pay button
         this.setCheckoutButtonsLoadingState(true);
         
-        // For now, just log the action - you can implement Base Pay specific logic here
-        // This could open a different modal or redirect to Base Pay flow
-        // In the future, this could integrate with Base Pay SDK or redirect to Base Pay flow
-        setTimeout(() => {
-          alert('Base Pay checkout feature coming soon! This will integrate with Base Pay for seamless crypto payments.');
-          this.setCheckoutButtonsLoadingState(false);
-        }, 1000);
+        // Extract price and title for the Vercel page
+        const price = productInfo?.price || 0;
+        const title = productInfo?.title || 'Amazon Product';
+        
+        // Store product info for the Vercel page to access
+        chrome.storage.local.set({
+          amazon_product_price: price,
+          amazon_product_title: title,
+          amazon_product_info: productInfo
+        });
+        
+        // Send message to background script to open Vercel tab
+        const vercelUrl = `https://webapp-ten-beige.vercel.app?price=${price}&title=${encodeURIComponent(title)}`;
+        chrome.runtime.sendMessage({
+          action: 'openVercelTab',
+          url: vercelUrl,
+          productInfo: {
+            ...productInfo
+          }
+        });
+        
+        console.log('Base Pay checkout: Sending message to open Vercel page');
         
       } catch (error) {
         console.error('Error in handleBasePayCheckout:', error);

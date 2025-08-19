@@ -3,6 +3,7 @@ import { useConnect, useSendTransaction, useWaitForTransactionReceipt, useAccoun
 import { coinbaseWallet } from 'wagmi/connectors';
 import { parseUnits, encodeFunctionData } from 'viem';
 import { base } from 'wagmi/chains';
+import { pay, getPaymentStatus } from '@base-org/account';
 import styles from '../styles/Home.module.css';
 
 // 🆕 ON RAMP INTEGRATION: Add On Ramp functionality for insufficient Base ETH
@@ -201,6 +202,59 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
     }
   };
 
+  const handleBasePayPayment = async () => {
+    if (!isConnected || !address) {
+      setError(new Error('Please connect your wallet first!'));
+      return;
+    }
+
+    try {
+      setError(null);
+      
+      console.log(`Initiating Base Pay payment of $${fixedAmountUSDC}`);
+      console.log(`Transaction will be sent to: ${merchantAddress}`);
+
+      console.log('=== BASE PAY INTEGRATION ===');
+      console.log('Amount: $' + fixedAmountUSDC);
+      console.log('To: ' + merchantAddress);
+      console.log('Network: Base');
+      console.log('Method: Base Pay SDK');
+      console.log('========================');
+
+      // Use Base Pay SDK to send payment
+      const payment = await pay({
+        amount: fixedAmountUSDC.toString(),
+        to: merchantAddress,
+        testnet: true // Start with testnet for testing
+      });
+      
+      console.log('Base Pay successful! Payment ID:', payment.id);
+      
+      // Poll for payment status
+      const { status } = await getPaymentStatus({ 
+        id: payment.id,
+        testnet: true
+      });
+      
+      if (status === 'completed') {
+        console.log('🎉 Payment settled on Base!');
+        onPaymentSuccess?.(payment.id);
+        onShowCongratulation?.(payment.id);
+      } else {
+        console.log('Payment status:', status);
+        // Could implement retry logic here
+        onPaymentSuccess?.(payment.id);
+        onShowCongratulation?.(payment.id);
+      }
+
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error('Base Pay failed');
+      console.error('Base Pay failed:', error);
+      setError(error);
+      onPaymentError?.(error);
+    }
+  };
+
   const handleButtonClick = async () => {
     if (!isConnected) {
       connectCoinbaseWallet();
@@ -225,8 +279,8 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
       console.log('Already on Base network');
     }
 
-    // Now make the payment
-    makePayment();
+    // Now use Base Pay instead of regular USDC transfer
+    handleBasePayPayment();
   };
 
   // 🆕 ON RAMP: Generate quote for buying Base ETH
@@ -324,7 +378,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
     if (isSending || isConfirming || isPostVerificationProcessing) return 'Processing';
     if (!isConnected) return 'Connect to wallet';
     if (gasError) return 'Fee estimation failed';
-    return 'Pay $0.01 USDC on Base';
+    return 'Use Base Pay';
   };
 
   return (

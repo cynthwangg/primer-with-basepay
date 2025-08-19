@@ -914,11 +914,18 @@ import { onrampIntegration } from './onramp-integration';
         // Set loading state for Base Pay button
         this.setCheckoutButtonsLoadingState(true);
         
-        // For now, just log the action - you can implement Base Pay specific logic here
-        // This could open a different modal or redirect to Base Pay flow
-        // In the future, this could integrate with Base Pay SDK or redirect to Base Pay flow
+        // Build Base Pay webapp URL with product information
+        const basePayUrl = new URL('https://basepay-webapp.vercel.app');
+        basePayUrl.searchParams.set('price', productInfo.price.toString());
+        basePayUrl.searchParams.set('title', encodeURIComponent(productInfo.title));
+        
+        console.log('Redirecting to Base Pay webapp:', basePayUrl.toString());
+        
+        // Open Base Pay webapp in a new tab
+        window.open(basePayUrl.toString(), '_blank');
+        
+        // Reset button state after a short delay
         setTimeout(() => {
-          alert('Base Pay checkout feature coming soon! This will integrate with Base Pay for seamless crypto payments.');
           this.setCheckoutButtonsLoadingState(false);
         }, 1000);
         

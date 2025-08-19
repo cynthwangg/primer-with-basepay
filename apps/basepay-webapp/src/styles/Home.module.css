@@ -1,0 +1,745 @@
+.container {
+  padding: 0;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f5f5f5;
+}
+
+.main {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Main Container - Fixed size like popup */
+.mainContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 650px;
+  background: #F8F8F8;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  font-family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+  transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Congratulation Container - Same size as Place Your Order page */
+.mainContainer.congratulation {
+  height: 380px; /* Adjusted height for better proportions */
+}
+
+/* Header Section - Exactly like popup */
+.header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background: #131921;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.headerTitle {
+  color: #FFFFFF;
+  font-family: 'Amazon Ember Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 400;
+  font-size: 22px;
+  alignSelf: center;
+  text-align: center;
+  width: 100%;
+}
+
+/* Items Breakdown Section - Exactly like popup */
+.itemsBreakdown {
+  position: absolute;
+  top: 90px;
+  left: 20px;
+  right: 20px;
+  background: #FFFFFF;
+  border-radius: 5px;
+  /* Removed box-shadow and border */
+  padding: 20px;
+}
+
+.sectionTitle {
+  font-family: 'Amazon Ember Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: #111827;
+  margin: 0 0 12px 0;
+}
+
+.itemRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-family: 'Amazon Ember Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  color: #374151;
+}
+
+.itemLabel {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.itemValue {
+  color: #374151;
+  font-weight: 400;
+}
+
+.infoIcon, .timeIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-left: 4px;
+}
+
+.infoIcon img, .timeIcon img {
+  width: 16px;
+  height: 16px;
+}
+
+.timeIcon {
+  margin-left: 0;
+  margin-right: 4px;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background: #D1D5DB;
+  margin: 12px 0;
+  border-style: dotted;
+  border-top: 1px dotted #D1D5DB;
+  border-bottom: none;
+  border-left: none;
+  border-right: none;
+}
+
+/* Combined Information Container */
+.infoContainer {
+  position: absolute;
+  top: 290px;
+  left: 20px;
+  right: 20px;
+  background: #FFFFFF;
+  border-radius: 5px;
+  padding: 16px 20px 20px 20px; /* Reduced top padding from 20px to 12px */
+  height: 270px; /* Reduced from 280px to move lower edge up */
+}
+
+.section {
+  margin-bottom: 12px; /* Reduced from 20px to tighten spacing */
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.sectionSubtitle {
+  font-family: 'Amazon Ember Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 1.197;
+  color: #000000;
+  margin: 0 0 8px 0; /* Reduced from 12px to tighten spacing */
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px; /* Reduced from 8px to tighten spacing */
+  font-family: 'Amazon Ember Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.197;
+}
+
+.infoLabel {
+  color: rgba(0, 0, 0, 0.75);
+  flex-shrink: 0;
+}
+
+.infoValue {
+  color: rgba(0, 0, 0, 0.75);
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.addressWithIcon {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.externalLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 9px;
+  height: 9px;
+}
+
+.externalLink img {
+  width: 9px;
+  height: 9px;
+  object-fit: contain;
+}
+
+.timestampInfo {
+  font-family: 'Amazon Ember Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 400;
+  font-size: 8px;
+  line-height: 1.197;
+  color: rgba(0, 0, 0, 0.5);
+  margin-bottom: 8px;
+  margin-top: 8px;
+  text-align: left;
+}
+
+/* Section Separator Lines */
+.sectionSeparator {
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.15);
+  margin: 8px 0; /* Reduced from 12px to tighten spacing */
+  width: 100%;
+}
+
+/* Connection Info Footer */
+.connectionInfo {
+  position: absolute;
+  top: 568px; /* Reduced from 590px to account for smaller container */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px; /* Reduced gap for tighter spacing */
+  font-family: 'Amazon Ember Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  margin-bottom: 20px;
+  z-index: 10; /* Ensure it's visible */
+  min-width: 280px; /* Ensure enough width for the text */
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+.connectionLabel {
+  font-weight: 400;
+  font-size: 13px; /* Slightly reduced from 14px for better fit */
+  line-height: 1.197;
+  color: rgba(0, 0, 0, 0.75);
+}
+
+.connectionValue {
+  font-weight: 500;
+  font-size: 13px; /* Slightly reduced from 14px for better fit */
+  line-height: 1.197;
+  color: #000000;
+}
+
+.coinbaseIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 15.1px;
+  height: 15.1px;
+}
+
+.coinbaseIcon img {
+  width: 15.1px;
+  height: 15.1px;
+  object-fit: contain;
+}
+
+.disconnectWalletLink {
+  background: none;
+  border: none;
+  color: #000000;
+  font-family: 'Amazon Ember Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.197;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+  display: block;
+  margin: 0 auto 15px auto;
+  text-align: center;
+}
+
+.disconnectWalletLink:hover {
+  color: #666666;
+}
+
+/* Connect Wallet Button */
+.connectWalletButton {
+  width: 189px !important;
+  height: 32px !important;
+  background: #FFD812 !important;
+  border: none !important;
+  border-radius: 16px !important;
+  color: #000000 !important;
+  font-family: 'Amazon Ember Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  line-height: 1.197 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  position: absolute !important;
+  bottom: 11px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  outline: none !important;
+  text-decoration: none !important;
+  display: block !important;
+  text-align: center !important;
+}
+
+.connectWalletButton:hover {
+  background: #F4C800;
+  transform: translateX(-50%) translateY(-1px);
+  bottom: 11px !important;
+}
+
+.connectWalletButton:active {
+  background: #E6B800;
+  transform: translateX(-50%) translateY(0);
+  bottom: 11px !important;
+}
+
+.connectWalletButton:disabled {
+  background: #E5E7EB !important;
+  color: #9CA3AF !important;
+  cursor: not-allowed !important;
+  transform: translateX(-50%) !important;
+  bottom: 11px !important;
+}
+
+/* Loading state for button */
+.loading {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+}
+
+.loadingDots {
+  display: inline-block !important;
+  position: relative !important;
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.loadingDots::after {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  width: 4px !important;
+  height: 4px !important;
+  border-radius: 50% !important;
+  background: currentColor !important;
+  animation: loadingDots 1.2s linear infinite !important;
+}
+
+.loadingDots::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  width: 4px !important;
+  height: 4px !important;
+  border-radius: 50% !important;
+  background: currentColor !important;
+  animation: loadingDots 1.2s linear infinite !important;
+  animation-delay: -0.4s !important;
+}
+
+/* Sequential dot animation for processing state */
+.loadingDotsSequential {
+  display: inline-block !important;
+  position: relative !important;
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.loadingDotsSequential::after {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  width: 4px !important;
+  height: 4px !important;
+  border-radius: 50% !important;
+  background: currentColor !important;
+  animation: loadingDotsSequential 1.5s linear infinite !important;
+}
+
+.loadingDotsSequential::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  width: 4px !important;
+  height: 4px !important;
+  border-radius: 50% !important;
+  background: currentColor !important;
+  animation: loadingDotsSequential 1.5s linear infinite !important;
+  animation-delay: -0.5s !important;
+}
+
+@keyframes loadingDots {
+  0%, 80%, 100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes loadingDotsSequential {
+  0%, 100% {
+    transform: scale(0);
+    opacity: 0.3;
+  }
+  20% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  40% {
+    transform: scale(0);
+    opacity: 0.3;
+  }
+}
+
+.loadingDots::after {
+  left: 8px !important;
+}
+
+.loadingDots::before {
+  left: 0 !important;
+}
+
+.connectedButton {
+  background: #FFD812;
+  color: #000000;
+}
+
+.connectedButton:hover {
+  background: #F4C800;
+}
+
+.connectedButton:active {
+  background: #E6B800;
+}
+
+/* Payment Button Container */
+.paymentButtonContainer {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Transaction Status Display */
+.transactionStatus {
+  margin-top: 15px;
+  padding: 15px;
+  background: #f0f9ff;
+  border: 1px solid #0ea5e9;
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+  max-width: 350px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.statusTitle {
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #0c4a6e;
+}
+
+.txHash {
+  font-family: monospace;
+  font-size: 12px;
+  word-break: break-all;
+  background: #e0f2fe;
+  padding: 8px;
+  border-radius: 4px;
+  margin: 8px 0;
+  color: #0c4a6e;
+}
+
+.statusIndicator {
+  margin-top: 8px;
+  font-weight: 500;
+  color: #0c4a6e;
+}
+
+/* Error Display */
+.errorDisplay {
+  margin-top: 15px;
+  padding: 15px;
+  background: #fef2f2;
+  border: 1px solid #ef4444;
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+  color: #dc2626;
+  max-width: 350px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+
+
+/* Responsive adjustments */
+@media (max-width: 450px) {
+  .mainContainer {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    min-height: 600px;
+  }
+  
+  .container {
+    padding: 10px;
+  }
+}
+
+/* Disconnect Button Container - Same position as connection info */
+.disconnectButtonContainer {
+  position: absolute;
+  top: 568px; /* Same as .connectionInfo - moved up 10px */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+/* Disconnect Wallet Button */
+.disconnectWalletButton {
+  background: transparent !important;
+  border: none !important;
+  color: #0066cc !important;
+  text-decoration: underline !important;
+  font-size: 14px !important;
+  cursor: pointer !important;
+  font-family: 'Amazon Ember Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-weight: 400 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  outline: none !important;
+  transition: color 0.2s ease !important;
+}
+
+.disconnectWalletButton:hover {
+  color: #0052a3 !important;
+}
+
+.disconnectWalletButton:active {
+  color: #003d7a !important;
+}
+
+/* Button Container */
+.buttonContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+
+
+/* Congratulation Page Styles */
+.congratulationContent {
+  position: absolute;
+  top: 89px;
+  left: 17px;
+  right: 17px;
+  background: #FFFFFF;
+  border-radius: 2px;
+  padding: 32px 19px;
+  height: 230px; /* Adjusted height for equal top/bottom padding */
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: slideInContent 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s both;
+}
+
+@keyframes slideInContent {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.congratulationTitle {
+  font-family: 'Amazon Ember Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.197;
+  color: #111827; /* Match the exact color from .sectionTitle */
+  margin: 0 0 12px 0; /* Match the exact margin from .sectionTitle */
+  animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.5s both;
+}
+
+.congratulationMessage {
+  font-family: 'Amazon Ember Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.197;
+  color: rgba(0, 0, 0, 0.5);
+  margin-bottom: 20px;
+  text-align: left; /* Left-aligned as requested */
+  animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.6s both;
+}
+
+.transactionDetails {
+  margin-bottom: 40px; /* Increased spacing for better layout */
+  animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.7s both;
+}
+
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+  font-family: 'Amazon Ember Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px; /* Match the font size from .itemRow */
+  line-height: 1.197;
+}
+
+/* Special layout for transaction hash row */
+.detailRow.transactionHashRow {
+  justify-content: space-between;
+  gap: 0;
+}
+
+/* Special layout for Amazon receiver address row */
+.detailRow.amazonReceiverRow {
+  justify-content: space-between;
+  gap: 0;
+}
+
+.detailLabel {
+  color: #374151; /* Match the exact color from .itemRow */
+  font-weight: 400;
+  flex-shrink: 0;
+}
+
+.detailValue {
+  color: #374151; /* Match the exact color from .itemRow */
+  font-weight: 400;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.externalLinkButton {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 9px;
+  height: 9px;
+  margin-left: 4px; /* Small gap between icon and address */
+}
+
+.externalLinkButton img {
+  width: 9px;
+  height: 9px;
+  object-fit: contain;
+}
+
+.redirectButton {
+  width: 189px;
+  height: 32px;
+  background: #FFD812;
+  border: none;
+  border-radius: 16px;
+  color: #000000;
+  font-family: 'Amazon Ember Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.197;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: absolute;
+  top: 242px; /* Positioned below the white box (89 + 180 + 21 padding) */
+  left: 25%;
+  transform: translateX(-50%);
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  text-decoration: none;
+  justify-content: center;
+  align-items: center;
+  display: block;
+  text-align: center;
+  animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.8s both;
+}
+
+.redirectButton:hover {
+  background: #F4C800;
+  transform: translateX(-50%) translateY(-1px);
+}
+
+.redirectButton:active {
+  background: #E6B800;
+  transform: translateX(-50%) translateY(0);
+}

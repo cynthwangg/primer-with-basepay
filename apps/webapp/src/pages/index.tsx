@@ -13,7 +13,6 @@ const Home = () => {
   const [productPrice, setProductPrice] = useState<number>(0.01);
   const [productTitle, setProductTitle] = useState<string>('Amazon Basics 4K Fire TV Stick');
   const [currentTime, setCurrentTime] = useState<string>('');
-  const [isBasePay, setIsBasePay] = useState<boolean>(false);
   
   // Price state - commented out for now, using fixed $0.01
   // const [priceData, setPriceData] = useState<PriceData | null>(null);
@@ -292,50 +291,7 @@ const Home = () => {
     alert(`Payment failed: ${error.message}`);
   };
 
-  // Base Pay payment function
-  const handleBasePayPayment = async () => {
-    try {
-      console.log('🚀 Initiating Base Pay payment...');
-      
-      const payment = await pay({
-        amount: productPrice.toFixed(2),
-        to: MERCHANT_ADDRESS,
-        testnet: true // Set to false for mainnet
-      });
-      
-      console.log(`✅ Base Pay payment initiated! Transaction ID: ${payment.id}`);
-      
-      // Poll for payment completion
-      const pollForCompletion = async () => {
-        try {
-          const { status } = await getPaymentStatus({
-            id: payment.id,
-            testnet: true // Must match the testnet setting used in pay()
-          });
-          
-          if (status === 'completed') {
-            console.log('🎉 Base Pay payment completed!');
-            // Call existing success handler with transaction ID
-            await handlePaymentSuccess(payment.id);
-            handleShowCongratulation(payment.id);
-          } else {
-            console.log(`Payment status: ${status}, continuing to poll...`);
-            setTimeout(pollForCompletion, 2000); // Poll every 2 seconds
-          }
-        } catch (error) {
-          console.error('Error checking payment status:', error);
-          handlePaymentError(error as Error);
-        }
-      };
-      
-      // Start polling
-      setTimeout(pollForCompletion, 2000);
-      
-    } catch (error) {
-      console.error('❌ Base Pay payment failed:', error);
-      handlePaymentError(error as Error);
-    }
-  };
+
 
   // Update the wallet sender address display when connected
   const getWalletDisplay = () => {
@@ -525,6 +481,10 @@ const Home = () => {
                 onClick={handleDisconnect}
               >
                 Disconnect from Wallet
+              </button>
+            </div>
+          )}
+          
           {/* Base Pay Button - Always show at bottom center */}
           {isBasePay ? (
             <div className={styles.paymentButtonContainer}>

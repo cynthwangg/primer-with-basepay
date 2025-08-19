@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useConnect, useAccount, useDisconnect } from 'wagmi';
 import { coinbaseWallet } from 'wagmi/connectors';
+import { pay, getPaymentStatus } from '@base-org/account';
 import { priceConversionService, PriceData } from '../services/priceConversion';
 import { getMerchantAddress } from '../config/merchant';
 import PaymentButton from '../components/PaymentButton';
@@ -12,6 +13,7 @@ const Home = () => {
   const [productPrice, setProductPrice] = useState<number>(0.01);
   const [productTitle, setProductTitle] = useState<string>('Amazon Basics 4K Fire TV Stick');
   const [currentTime, setCurrentTime] = useState<string>('');
+  const [isBasePay, setIsBasePay] = useState<boolean>(false);
   
   // Price state - commented out for now, using fixed $0.01
   // const [priceData, setPriceData] = useState<PriceData | null>(null);
@@ -60,10 +62,11 @@ const Home = () => {
   // }, [productPrice]);
 
   useEffect(() => {
-    // Get price and title from URL parameters
+    // Get price, title, and wallet type from URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     const price = urlParams.get('price');
     const title = urlParams.get('title');
+    const wallet = urlParams.get('wallet');
     
     if (price) {
       const priceNum = parseFloat(price);
@@ -72,6 +75,10 @@ const Home = () => {
     
     if (title) {
       setProductTitle(decodeURIComponent(title));
+    }
+    
+    if (wallet === 'basepay') {
+      setIsBasePay(true);
     }
 
     // Update time every second
@@ -285,6 +292,51 @@ const Home = () => {
     alert(`Payment failed: ${error.message}`);
   };
 
+  // Base Pay payment function
+  const handleBasePayPayment = async () => {
+    try {
+      console.log('🚀 Initiating Base Pay payment...');
+      
+      const payment = await pay({
+        amount: productPrice.toFixed(2),
+        to: MERCHANT_ADDRESS,
+        testnet: true // Set to false for mainnet
+      });
+      
+      console.log(`✅ Base Pay payment initiated! Transaction ID: ${payment.id}`);
+      
+      // Poll for payment completion
+      const pollForCompletion = async () => {
+        try {
+          const { status } = await getPaymentStatus({
+            id: payment.id,
+            testnet: true // Must match the testnet setting used in pay()
+          });
+          
+          if (status === 'completed') {
+            console.log('🎉 Base Pay payment completed!');
+            // Call existing success handler with transaction ID
+            await handlePaymentSuccess(payment.id);
+            handleShowCongratulation(payment.id);
+          } else {
+            console.log(`Payment status: ${status}, continuing to poll...`);
+            setTimeout(pollForCompletion, 2000); // Poll every 2 seconds
+          }
+        } catch (error) {
+          console.error('Error checking payment status:', error);
+          handlePaymentError(error as Error);
+        }
+      };
+      
+      // Start polling
+      setTimeout(pollForCompletion, 2000);
+      
+    } catch (error) {
+      console.error('❌ Base Pay payment failed:', error);
+      handlePaymentError(error as Error);
+    }
+  };
+
   // Update the wallet sender address display when connected
   const getWalletDisplay = () => {
     if (!isConnected || !address) {
@@ -434,11 +486,45 @@ const Home = () => {
               
               <div className={styles.infoRow}>
                 <span className={styles.infoLabel}>Token:</span>
-                <span className={styles.infoValue}>Ethereum (ETH)</span>
+                <span className={styles.infoValue}>{isBasePay ? 'USD Coin (USDC)' : 'Ethereum (ETH)'}</span>
               </div>
             </div>
           </div>
 
+          {/* Connection Info Footer */}
+          <div className={styles.connectionInfo}>
+            {isBasePay ? (
+              // Show Base Pay info when using Base Pay
+              <>
+                <span className={styles.connectionLabel}>Connecting through: </span>
+                <span className={styles.connectionValue}>Base Pay</span>
+                {/* <span className={styles.coinbaseIcon}>
+                  <img src="/icons/basepay.png" alt="Base Pay" />
+                </span> */}
+              </>
+            ) : isConnected ? (
+              // Don't show "Connected to:" text when wallet is connected
+              // The disconnect button in PaymentButton already shows connection status
+              null
+            ) : (
+              <>
+                <span className={styles.connectionLabel}>Connecting through: </span>
+                <span className={styles.connectionValue}>Coinbase Wallet</span>
+                <span className={styles.coinbaseIcon}>
+                  <img src="/icons/CB.svg" alt="Coinbase Wallet" />
+                </span>
+              </>
+            )}
+          </div>
+          
+          {/* Disconnect Button - Show when wallet is connected */}
+          {isConnected && (
+            <div className={styles.disconnectButtonContainer}>
+              <button 
+                className={styles.disconnectWalletLink}
+                onClick={handleDisconnect}
+              >
+                Disconnect from Wallet
           {/* Base Pay Button - Always show at bottom center */}
           {isBasePay ? (
             <div className={styles.paymentButtonContainer}>

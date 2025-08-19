@@ -458,9 +458,8 @@ const Home = () => {
                   justifyContent: 'center',
                   gap: '8px'
                 }}
-              > 
-                Checkout with
-                <img src="/icons/BasePayWhiteLogo.png" alt="Base Pay" style={{ width: '20px', height: '20px' }} />
+              > Checkout with
+                <img src="/icons/white.png" alt="Base Pay" style={{ width: '60px', height: 'auto' }} />
               </button>
             </div>
           ) : (

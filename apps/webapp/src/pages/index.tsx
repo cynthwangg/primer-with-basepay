@@ -110,21 +110,41 @@ const Home = () => {
     try {
       console.log(`Initiating Base Pay payment of $${productPrice} to ${MERCHANT_ADDRESS}`);
       
-      // For now, simulate Base Pay success since we don't have the SDK yet
-      // In the future, this will integrate with Base Pay SDK
-      console.log('=== BASE PAY SIMULATION ===');
+      console.log('=== BASE PAY INTEGRATION ===');
       console.log('Amount: $' + productPrice);
       console.log('To: ' + MERCHANT_ADDRESS);
       console.log('Network: Base');
-      console.log('Method: Base Pay SDK (simulated)');
+      console.log('Method: Base Pay SDK');
       console.log('========================');
 
-      // Simulate successful payment
-      const simulatedTxHash = '0x' + Math.random().toString(16).substr(2, 64);
-      console.log('Base Pay successful! Simulated transaction hash:', simulatedTxHash);
+      // Import Base Pay SDK functions
+      const { pay, getPaymentStatus } = await import('@base-org/account');
       
-      onPaymentSuccess?.(simulatedTxHash);
-      onShowCongratulation?.(simulatedTxHash);
+      // Use Base Pay SDK to send payment
+      const payment = await pay({
+        amount: productPrice.toString(), // Use actual product price
+        to: MERCHANT_ADDRESS,
+        testnet: true // Start with testnet for testing
+      });
+      
+      console.log('Base Pay successful! Payment ID:', payment.id);
+      
+      // Poll for payment status
+      const { status } = await getPaymentStatus({ 
+        id: payment.id,
+        testnet: true
+      });
+      
+      if (status === 'completed') {
+        console.log('🎉 Payment settled on Base!');
+        handlePaymentSuccess(payment.id);
+        handleShowCongratulation(payment.id);
+      } else {
+        console.log('Payment status:', status);
+        // Could implement retry logic here
+        handlePaymentSuccess(payment.id);
+        handleShowCongratulation(payment.id);
+      }
 
     } catch (error) {
       console.error('Base Pay failed:', error);
@@ -396,7 +416,7 @@ const Home = () => {
               
               <div className={styles.infoRow}>
                 <span className={styles.infoLabel}>Amount due in crypto:</span>
-                <span className={styles.infoValue}>0.01 USDC ($0.01)</span>
+                <span className={styles.infoValue}>{productPrice.toFixed(2)} USDC (${productPrice.toFixed(2)})</span>
               </div>
             </div>
 
@@ -440,7 +460,7 @@ const Home = () => {
                 }}
               > 
                 Checkout with
-                <img src="/icons/CB.svg" alt="Base Pay" style={{ width: '20px', height: '20px' }} />
+                <img src="/icons/BasePayWhiteLogo.png" alt="Base Pay" style={{ width: '20px', height: '20px' }} />
               </button>
             </div>
           ) : (

@@ -157,11 +157,11 @@ cd apps/webapp && pnpm test
 ## Deployment
 
 ### Webapp
-- **Vercel**: Automatic deployment from main branch
-- **Custom**: Build with `pnpm build` and deploy to your hosting
+- **Local**: `pnpm dev` runs on localhost:3000
+- **Production**: Build with `pnpm build` and deploy to your hosting
 
 ### Backend
-- **Local**: `pnpm dev` for development
+- **Local**: `pnpm dev` runs on localhost:3001
 - **Production**: Build with `pnpm build` and deploy to your server
 - **Environment**: Set production environment variables
 

@@ -130,7 +130,7 @@ const Home = () => {
       const payment = await pay({
         amount: productPrice.toString(), // Use actual product price
         to: MERCHANT_ADDRESS,
-        testnet: true // Start with testnet for testing
+        testnet: false // Use Base mainnet for real payments
       });
       
       console.log('Base Pay successful! Payment ID:', payment.id);
@@ -138,7 +138,7 @@ const Home = () => {
       // Poll for payment status
       const { status } = await getPaymentStatus({ 
         id: payment.id,
-        testnet: true
+        testnet: false
       });
       
       if (status === 'completed') {

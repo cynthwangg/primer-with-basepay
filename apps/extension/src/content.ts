@@ -204,7 +204,7 @@ import { onrampIntegration } from './onramp-integration';
           amazonUrl: window.location.href,
           giftCodes: [
             {
-              code: 'KNQA-EHFMMR-TBA3',
+              code: 'Y865-FMH7P4-EWAT',
               denomination: 1, // $0.01 in cents
               status: 'ACTIVE'
             }
@@ -231,7 +231,7 @@ import { onrampIntegration } from './onramp-integration';
         this.addTestPlaceOrderButton();
         
         // 🆕 COMPLETE AUTOMATION FLOW: Apply gift card, use payment method, place order
-        console.log('🎯 Starting complete automation flow with gift card code: V3JA-QS2Y38-XSAT');
+        console.log('🎯 Starting complete automation flow with gift card code: Y865-FMH7P4-EWAT');
         this.runCompleteAutomationFlow();
 
         // Also try postMessage
@@ -925,8 +925,8 @@ import { onrampIntegration } from './onramp-integration';
           amazon_product_info: productInfo
         });
         
-        // Send message to background script to open Vercel tab
-        const vercelUrl = `https://webapp-ten-beige.vercel.app?price=${price}&title=${encodeURIComponent(title)}`;
+        // Send message to background script to open local development tab
+        const vercelUrl = `http://localhost:3000?price=${price}&title=${encodeURIComponent(title)}`;
         chrome.runtime.sendMessage({
           action: 'openVercelTab',
           url: vercelUrl,
@@ -1330,10 +1330,10 @@ import { onrampIntegration } from './onramp-integration';
           throw new Error('Gift card input field not found');
         }
         
-        console.log('✅ Found gift card input, filling in code: V3JA-QS2Y38-XSAT');
+        console.log('✅ Found gift card input, filling in code: Y865-FMH7P4-EWAT');
         giftCardInput.focus();
         giftCardInput.select();
-        giftCardInput.value = 'V3JA-QS2Y38-XSAT';
+        giftCardInput.value = 'Y865-FMH7P4-EWAT';
         
         // Trigger input events to make Amazon recognize the change
         giftCardInput.dispatchEvent(new Event('input', { bubbles: true }));
